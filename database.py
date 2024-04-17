@@ -21,7 +21,6 @@ class Database:
     # Get the list of all Habits in the database
     def readHabitTable(self):
         query = Query()
-        #return self.habitTable.search(query.habit.all([]))
         return self.habitTable.all()
 
     # Write event to database
