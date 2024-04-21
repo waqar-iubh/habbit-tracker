@@ -1,5 +1,5 @@
 import traceback
-import datetime
+from datetime import datetime
 
 from habit import *
 from query import *
@@ -12,16 +12,6 @@ def createHabit(name, period):
     habit.sync()
     return habit
 
-def completeHabit(name, date):
-    query = Query()
-    habit = query.getHabitByName(name)
-    if habit is None:
-        raise Exception(f"Habit {name} does not exist")
-
-    event = Event(habit, date)
-    if not event.existsInDB():
-        event.sync()
-
 def listHabits():
     query = Query()
     habbitList = query.getHabitList()
@@ -31,17 +21,54 @@ def listHabits():
 def main():
     try:
         habit1 = createHabit("habit1", 'daily')
-        habit1 = createHabit("habit2", 'weekly')
-        habit1 = createHabit("habit3", 'daily')
-        habit1 = createHabit("habit4", 'weekly')
+        habit2 = createHabit("habit2", 'weekly')
         listHabits()
         
-        date = datetime.datetime(2024, 4, 16)
-        completeHabit('habit1', date.strftime('%Y/%m/%d'))
-
-        date = datetime.datetime(2024, 4, 17)
-        completeHabit('habit1', date.strftime('%Y/%m/%d'))
+        date = datetime(2024, 4, 23)
+        habit1.completeHabit(date.strftime('%Y/%m/%d'))
         
+        date = datetime(2024, 4, 21)
+        habit1.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 20)
+        habit1.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 17)
+        habit1.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 16)
+        habit1.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 10)
+        habit1.completeHabit(date.strftime('%Y/%m/%d'))
+
+        query = Query()
+        longest = query.getLongestStreakForHabit('habit1')
+        print (longest)
+
+
+        date = datetime(2024, 4, 1)
+        habit2.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 7)
+        habit2.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 14)
+        habit2.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 22)
+        habit2.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 4, 29)
+        habit2.completeHabit(date.strftime('%Y/%m/%d'))
+
+        date = datetime(2024, 5, 7)
+        habit2.completeHabit(date.strftime('%Y/%m/%d'))
+
+        query = Query()
+        longest = query.getLongestStreakForHabit('habit2')
+        print(longest)
+
     except Exception as e: 
         print(e, traceback.format_exc())
 

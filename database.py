@@ -27,7 +27,7 @@ class Database:
     def writeEvent(self, habit, date):
         self.eventTable.insert({'habit': habit, 'date': date})
 
-    # Read events from from database
+    # Get events for habit from from database
     def readEvent(self, habit):
         query = Query()
         return self.eventTable.search(query.habit.all([habit]))

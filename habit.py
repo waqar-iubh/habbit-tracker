@@ -29,11 +29,13 @@ class Habit:
     def sync(self):
         self.db.writeHabit(self.name, self.period)
     
-    # Checkoff habit
-    def checkoff(self, event):
-        pass
-
     # Check if already exists in DB
     def existsInDB(self):
         record = self.db.readHabit(self.name)
         return False if record is None else True
+
+    # Complete habit
+    def completeHabit(self, date):
+        event = Event(self, date)
+        if not event.existsInDB():
+            event.sync()
