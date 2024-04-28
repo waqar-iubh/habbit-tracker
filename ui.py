@@ -1,76 +1,109 @@
-import traceback
 from datetime import datetime
 
 from habit import *
-from query import *
-
-def createHabit(name, period):
-    habit = Habit(name, period)
-    if habit.existsInDB():
-        raise Exception(f"Habit {name} already exists")
-
-    habit.sync()
-    return habit
-
-def listHabits():
-    query = Query()
-    habbitList = query.getHabitList()
-    for h in habbitList:
-        print(f" {h.name} ({h.period})")
+from analytics import *
 
 def main():
-    try:
-        habit1 = createHabit("habit1", 'daily')
-        habit2 = createHabit("habit2", 'weekly')
-        listHabits()
+    while(True):
+        print("\nChoose an option:")
+        print("1) List all habits")
+        print("2) Create a habit")
+        print("3) Complete a habit")
+        print("4) Delete a habit")
+        print("5) List habits by period")
+        print("6) Show longest streak for habit")
+        print("7) Show longest streak for all habits")
+        print("8) Exit")
+
+        choice = input("\nEnter choice: ")
+
+        try:
+            # List all Habits
+            if choice == "1":
+                query = Analytics()
+                habbitList = query.getHabitList()
+                count = 0
+
+                print("\nCurrent habits:\n")
+                for h in habbitList:
+                    print(f"{count}) {h.name} ({h.period})")
+                    count += 1
+
+            # Create a Habit
+            elif choice == "2":
+                name = input("Enter name: ")
+                period = input("Enter period (daily/weekly): ")
+                habit = createHabit(name, period)
+                print(f"\nHabit '{name}' created")
+
+
+            # Complete a Habit
+            elif choice == "3":
+                name = input("Enter name: ")
+                date = input("Enter date (YYYY/MM/DD): ")
+                datetime.strptime(date, '%Y/%m/%d')
+                completeHabit(name, date)
+                print(f"\nHabit '{name}' completed")
+
+
+            # Delete Habit
+            elif choice == "4":
+                name = input("Enter name: ")
+                deleteHabit(name)
+                print(f"\nHabit '{name}' deleted")
+
+
+            # List Habits by Period
+            elif choice == "5":
+                period = input("Enter period (daily/weekly): ")
+                query = Analytics()
+                habbitList = query.getHabitListByPeriod(period)
+                print(f"\n{period} habits:\n")
+
+                count = 0
+                for h in habbitList:
+                    print(f"{count}) {h.name} ({h.period})")
+                    count += 1
+
+
+            # Show longest streak for Habit
+            elif choice == "6":
+                name = input("Enter name: ")
+                query = Analytics()
+                habit = query.getHabitByName(name)
+                if habit is None:
+                    raise Exception(f"Habit '{name}' does not exist")
+                
+                streak = query.getLongestStreakForHabit(name)
+                print(f"Longest streak for '{name}' is {streak[1]} days starting from {streak[0]}")
+
+
+            # Show longest streak for all Habits
+            elif choice == "7":
+                query = Analytics()
+                habbitList = query.getHabitList()
+                longest_period = ('', 0)
+                longest_name = ''
+
+                for h in habbitList:
+                    streak = query.getLongestStreakForHabit(h.name)
+                    if streak[1] >= longest_period[1]:
+                        longest_period = streak
+                        longest_name = h.name
+
+                print(f"Longest streak is for '{longest_name}' which is {longest_period[1]} days starting from {longest_period[0]}")
+
+            # Exit
+            elif choice == "8":
+                break
+       
+            else:
+                print('Invalid choice')
+
+        except Exception as e:
+            print("\nError: ", e)
         
-        date = datetime(2024, 4, 23)
-        habit1.completeHabit(date.strftime('%Y/%m/%d'))
-        
-        date = datetime(2024, 4, 21)
-        habit1.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 20)
-        habit1.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 17)
-        habit1.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 16)
-        habit1.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 10)
-        habit1.completeHabit(date.strftime('%Y/%m/%d'))
-
-        query = Query()
-        longest = query.getLongestStreakForHabit('habit1')
-        print (longest)
-
-
-        date = datetime(2024, 4, 1)
-        habit2.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 7)
-        habit2.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 14)
-        habit2.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 22)
-        habit2.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 4, 29)
-        habit2.completeHabit(date.strftime('%Y/%m/%d'))
-
-        date = datetime(2024, 5, 7)
-        habit2.completeHabit(date.strftime('%Y/%m/%d'))
-
-        query = Query()
-        longest = query.getLongestStreakForHabit('habit2')
-        print(longest)
-
-    except Exception as e: 
-        print(e, traceback.format_exc())
+        input('\nPress enter to continue ...')
 
 if __name__ == "__main__":
     main()

@@ -5,29 +5,60 @@ class Database:
     
     # Initialize database
     def __init__(self, databasePath):
-        self.db = TinyDB(databasePath)
-        self.habitTable = self.db.table('Habits')
-        self.eventTable = self.db.table('Events')
+        self.databasePath = databasePath
     
     # Write Habit to database
     def writeHabit(self, name, period):
-        self.habitTable.insert({'name': name, 'period': period})
+        db = TinyDB(self.databasePath)
+        habitTable = db.table('Habits')
+        habitTable.insert({'name': name, 'period': period})
+        db.close()
 
     # Read Habit from database
     def readHabit(self, name):
+        db = TinyDB(self.databasePath)
+        habitTable = db.table('Habits')
         query = Query()
-        return self.habitTable.get(query.name == name)
+        res = habitTable.get(query.name == name)
+        db.close()
+        return res
 
     # Get the list of all Habits in the database
     def readHabitTable(self):
+        db = TinyDB(self.databasePath)
+        habitTable = db.table('Habits')
+        res = habitTable.all()
+        db.close()
+        return res
+
+    # Delete Habit from database
+    def deleteHabit(self, name):
+        db = TinyDB(self.databasePath)
+        habitTable = db.table('Habits')
         query = Query()
-        return self.habitTable.all()
+        habitTable.remove(query.name == name)
+        db.close()
 
     # Write event to database
     def writeEvent(self, habit, date):
-        self.eventTable.insert({'habit': habit, 'date': date})
+        db = TinyDB(self.databasePath)
+        eventTable = db.table('Events')
+        eventTable.insert({'habit': habit, 'date': date})
+        db.close()
 
     # Get events for habit from from database
-    def readEvent(self, habit):
+    def readEvents(self, habit):
+        db = TinyDB(self.databasePath)
+        eventTable = db.table('Events')
         query = Query()
-        return self.eventTable.search(query.habit.all([habit]))
+        res = eventTable.search(query.habit.all([habit]))
+        db.close()
+        return res
+    
+    # Delete Events for Habit from database
+    def deleteEvents(self, habit):
+        db = TinyDB(self.databasePath)
+        eventTable = db.table('Events')
+        query = Query()
+        eventTable.remove(query.habit == habit)
+        db.close()
