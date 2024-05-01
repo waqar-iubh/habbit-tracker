@@ -5,6 +5,7 @@ from analytics import *
 import unittest
 
 class TestHabitTracker(unittest.TestCase):
+    """ Unit tests for Habit Tracker """
 
     def testCreateHabit(self):
         """ Test createHabit """
