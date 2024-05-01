@@ -6,6 +6,7 @@ class Analytics:
         self.db = Database('habit.db')
     
     def getHabitList(self):
+        """ Get list of all Habits """
         from habit import Habit
         habitList = self.db.readHabitTable()
         result = []
@@ -15,6 +16,7 @@ class Analytics:
         return result
     
     def getHabitListByPeriod(self, period):
+        """ Get habit list by period """
         from habit import Habit
         if period not in ['daily', 'weekly']:
             raise Exception(f"Invalid period {period}")
@@ -28,6 +30,7 @@ class Analytics:
         return result
 
     def getHabitByName(self, name):
+        """ Get habit by name """
         from habit import Habit
         habit = None
         entry = self.db.readHabit(name)
@@ -37,6 +40,7 @@ class Analytics:
         return habit
     
     def getEventsList(self, habit):
+        """ Get list of completion events for habit """
         from habit import Event
         eventsList = self.db.readEvents(habit.name)
         result = []
@@ -46,6 +50,7 @@ class Analytics:
         return result
 
     def getLongestStreakForHabit(self, name):
+        """ Get the longest streak for specified habit """
         habit = self.getHabitByName(name)
         events = self.getEventsList(habit)
         sorted_events = sorted(events, key=lambda e: datetime.strptime(e.date, '%Y/%m/%d'))
@@ -70,6 +75,7 @@ class Analytics:
         return current if current[1] >= longest[1] else longest
 
     def getLongestStreakForAllHabits(self):
+        """ Get the longest streak for all habits """
         query = Analytics()
         habbitList = query.getHabitList()
         longest_period = ('', 0)
@@ -84,7 +90,9 @@ class Analytics:
         return longest_period, longest_name
     
     def dateFromString(self, datestr):
+        """ Convert string to datetime object """
         return datetime.strptime(datestr, '%Y/%m/%d')
 
     def dateToString(self, date):
+        """ Conver datetime object to string """
         return date.strftime('%Y/%m/%d')
