@@ -58,7 +58,7 @@ def main():
                 period = input("Enter period (daily/weekly): ")
                 query = Analytics()
                 habbitList = query.getHabitListByPeriod(period)
-                print(f"\n{period} habits:\n")
+                print(f"\n'{period}' habits:\n")
 
                 count = 0
                 for h in habbitList:

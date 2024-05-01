@@ -26,7 +26,7 @@ class Analytics:
         habitList = self.db.readHabitTable()
         result = []
         for hbt in habitList:
-            if hbt.period == period:
+            if hbt['period'] == period:
                 result.append(Habit(hbt['name'], hbt['period']))
 
         return result
