@@ -1,6 +1,7 @@
 # Habit Tracker Application
 ## Installation
 git clone git@github.com:waqar-iubh/habbit-tracker.git
+
 pip install tinydb
 
 ## Run
