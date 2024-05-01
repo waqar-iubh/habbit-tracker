@@ -2,6 +2,8 @@ from database import *
 from analytics import *
 
 class Event:
+    """ Class representing a completion event on a Habit """
+    
     def __init__(self, habit, date):
         self.db = Database('habit.db')
         self.habit = habit.name
@@ -20,6 +22,8 @@ class Event:
         return False 
 
 class Habit:
+    """ Class representing a Habit """
+
     def __init__(self, name, period):
         self.db = Database('habit.db')
         self.name = name

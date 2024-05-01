@@ -2,6 +2,8 @@ from datetime import datetime
 from database import *
 
 class Analytics:
+    """ Class representing the Analytics module """
+
     def __init__(self):
         self.db = Database('habit.db')
     

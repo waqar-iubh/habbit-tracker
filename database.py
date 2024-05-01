@@ -2,7 +2,8 @@ import pathlib
 from tinydb import TinyDB, Query
 
 class Database:
-    
+    """ Class for reading and writing to the TinyDB database """
+
     def __init__(self, databasePath):
         """ Initialize database """
         self.databasePath = databasePath
