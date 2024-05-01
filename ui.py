@@ -81,16 +81,7 @@ def main():
             # Show longest streak for all Habits
             elif choice == "7":
                 query = Analytics()
-                habbitList = query.getHabitList()
-                longest_period = ('', 0)
-                longest_name = ''
-
-                for h in habbitList:
-                    streak = query.getLongestStreakForHabit(h.name)
-                    if streak[1] >= longest_period[1]:
-                        longest_period = streak
-                        longest_name = h.name
-
+                longest_period, longest_name = query.getLongestStreakForAllHabits()
                 print(f"Longest streak is for '{longest_name}' which is {longest_period[1]} days starting from {longest_period[0]}")
 
             # Exit

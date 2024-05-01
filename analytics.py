@@ -60,7 +60,7 @@ class Analytics:
 
             if habit.period == 'daily' and delta.days == 1:
                 current = (current[0], current[1] + 1)
-            if habit.period == 'weekly' and delta.days <= 7:
+            elif habit.period == 'weekly' and delta.days <= 7:
                 current = (current[0], current[1] + delta.days)
             else:
                 if current[1] >= longest[1]:
@@ -68,6 +68,20 @@ class Analytics:
                 current = (sorted_events[i+1].date, 1)
 
         return current if current[1] >= longest[1] else longest
+
+    def getLongestStreakForAllHabits(self):
+        query = Analytics()
+        habbitList = query.getHabitList()
+        longest_period = ('', 0)
+        longest_name = ''
+
+        for h in habbitList:
+            streak = query.getLongestStreakForHabit(h.name)
+            if streak[1] >= longest_period[1]:
+                longest_period = streak
+                longest_name = h.name
+        
+        return longest_period, longest_name
     
     def dateFromString(self, datestr):
         return datetime.strptime(datestr, '%Y/%m/%d')
