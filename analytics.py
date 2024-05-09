@@ -70,19 +70,23 @@ class Analytics:
 
         return current if current[1] >= longest[1] else longest
 
-    def getLongestStreakForAllHabits(self):
+    def getLongestStreakForAllHabits(self, period):
         """ Get the longest streak for all habits """
         query = Analytics()
         habbitList = query.getHabitList()
         longest_period = ('', 0)
         longest_name = ''
 
+        if period not in ['daily', 'weekly']:
+            raise Exception(f"Invalid period {period}")
+ 
         for h in habbitList:
-            streak = query.getLongestStreakForHabit(h.name)
-            if streak[1] >= longest_period[1]:
-                longest_period = streak
-                longest_name = h.name
-        
+            if h.period == period:
+                streak = query.getLongestStreakForHabit(h.name)
+                if streak[1] >= longest_period[1]:
+                    longest_period = streak
+                    longest_name = h.name
+            
         return longest_period, longest_name
     
     def dateFromString(self, datestr):

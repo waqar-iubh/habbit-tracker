@@ -62,10 +62,15 @@ class TestHabitTracker(unittest.TestCase):
         habit2.completeHabit("2024/05/18")
 
         query = Analytics()
-        streak, name = query.getLongestStreakForAllHabits()
+        streak, name = query.getLongestStreakForAllHabits("weekly")
         self.assertEqual(streak[0], "2024/05/4")
         self.assertEqual(streak[1], 15)
         self.assertEqual(name, "habit2")
+
+        streak, name = query.getLongestStreakForAllHabits("daily")
+        self.assertEqual(streak[0], "2024/05/1")
+        self.assertEqual(streak[1], 3)
+        self.assertEqual(name, "habit1")
         deleteHabit("habit1")
         deleteHabit("habit2")
 

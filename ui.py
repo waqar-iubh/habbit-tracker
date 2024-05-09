@@ -80,9 +80,10 @@ def main():
 
             # Show longest streak for all Habits
             elif choice == "7":
+                period = input("Enter period (daily/weekly): ")
                 query = Analytics()
-                longest_period, longest_name = query.getLongestStreakForAllHabits()
-                print(f"Longest streak is for '{longest_name}' which is {longest_period[1]} days starting from {longest_period[0]}")
+                longest_period, longest_name = query.getLongestStreakForAllHabits(period)
+                print(f"Longest {period} streak is for '{longest_name}' which is {longest_period[1]} days starting from {longest_period[0]}")
 
             # Exit
             elif choice == "8":
