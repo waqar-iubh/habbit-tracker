@@ -28,6 +28,7 @@ class Habit:
         self.db = Database('habit.db')
         self.name = name
         self.period = period
+        self.events = []
 
     def sync(self):
         """ Sync Habit object to databse """
@@ -37,20 +38,19 @@ class Habit:
         """ Check if Habit already exists in DB """
         record = self.db.readHabit(self.name)
         return False if record is None else True
+    
+    def loadEvents(self):
+        """ Load completion events for Habit from DB """
+        eventsList = self.db.readEvents(self.name)
+        for evt in eventsList:
+            self.events.append(Event(self, evt['date']))        
 
     def completeHabit(self, date):
         """ Create a completion event for habit """
         event = Event(self, date)
         if not event.existsInDB():
             event.sync()
-
-    def getCompletionEvents(self):
-        """ Get list of completion events for Habit """
-        events = self.db.readEvents(self.name)
-        eventList = []
-        for evt in events:
-            eventList.append(Event(self, evt['date']))
-        return eventList
+            self.events.append(event)
     
     def deleteHabit(self):
         """ Remove Habit from database"""

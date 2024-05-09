@@ -13,7 +13,9 @@ class Analytics:
         habitList = self.db.readHabitTable()
         result = []
         for hbt in habitList:
-            result.append(Habit(hbt['name'], hbt['period']))
+            habit = Habit(hbt['name'], hbt['period'])
+            habit.loadEvents()
+            result.append(habit)
 
         return result
     
@@ -27,7 +29,9 @@ class Analytics:
         result = []
         for hbt in habitList:
             if hbt['period'] == period:
-                result.append(Habit(hbt['name'], hbt['period']))
+                habit = Habit(hbt['name'], hbt['period'])
+                habit.loadEvents()
+                result.append(habit)
 
         return result
 
@@ -38,24 +42,15 @@ class Analytics:
         entry = self.db.readHabit(name)
         if entry is not None:
             habit = Habit(entry['name'], entry['period'])
+            habit.loadEvents()
 
         return habit
-    
-    def getEventsList(self, habit):
-        """ Get list of completion events for habit """
-        from habit import Event
-        eventsList = self.db.readEvents(habit.name)
-        result = []
-        for evt in eventsList:
-            result.append(Event(habit, evt['date']))
-        
-        return result
 
     def getLongestStreakForHabit(self, name):
         """ Get the longest streak for specified habit """
         habit = self.getHabitByName(name)
-        events = self.getEventsList(habit)
-        sorted_events = sorted(events, key=lambda e: datetime.strptime(e.date, '%Y/%m/%d'))
+        #events = self.getEventsList(habit)
+        sorted_events = sorted(habit.events, key=lambda e: datetime.strptime(e.date, '%Y/%m/%d'))
 
         longest = ('', 0)
         current = ('', 0)

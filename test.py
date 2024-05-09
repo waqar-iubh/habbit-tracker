@@ -21,9 +21,8 @@ class TestHabitTracker(unittest.TestCase):
         """ Test completeHabit """
 
         habit = createHabit("habit2", "daily")
-        completeHabit("habit2", "2024/04/28")
-        events = habit.getCompletionEvents()
-        self.assertEqual(len(events) , 1)
+        habit.completeHabit("2024/04/28")
+        self.assertEqual(len(habit.events) , 1)
         deleteHabit("habit2")
 
     def testDeleteHabit(self):
@@ -39,10 +38,10 @@ class TestHabitTracker(unittest.TestCase):
         """ Test longestStreakForHabit """
 
         habit = createHabit("habit1", "daily")
-        completeHabit("habit1", "2024/05/1")
-        completeHabit("habit1", "2024/05/2")
-        completeHabit("habit1", "2024/05/3")
-        completeHabit("habit1", "2024/05/5")
+        habit.completeHabit("2024/05/1")
+        habit.completeHabit("2024/05/2")
+        habit.completeHabit("2024/05/3")
+        habit.completeHabit("2024/05/5")
         query = Analytics()
         streak = query.getLongestStreakForHabit("habit1")
         self.assertEqual(streak[0], "2024/05/1")
@@ -53,14 +52,14 @@ class TestHabitTracker(unittest.TestCase):
         """ Test longestStreakForAllHabits """
 
         habit1 = createHabit("habit1", "daily")
-        completeHabit("habit1", "2024/05/1")
-        completeHabit("habit1", "2024/05/2")
-        completeHabit("habit1", "2024/05/3")
+        habit1.completeHabit("2024/05/1")
+        habit1.completeHabit("2024/05/2")
+        habit1.completeHabit("2024/05/3")
 
         habit2 = createHabit("habit2", "weekly")
-        completeHabit("habit2", "2024/05/4")
-        completeHabit("habit2", "2024/05/11")
-        completeHabit("habit2", "2024/05/18")
+        habit2.completeHabit("2024/05/4")
+        habit2.completeHabit("2024/05/11")
+        habit2.completeHabit("2024/05/18")
 
         query = Analytics()
         streak, name = query.getLongestStreakForAllHabits()
