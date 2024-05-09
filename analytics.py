@@ -49,7 +49,6 @@ class Analytics:
     def getLongestStreakForHabit(self, name):
         """ Get the longest streak for specified habit """
         habit = self.getHabitByName(name)
-        #events = self.getEventsList(habit)
         sorted_events = sorted(habit.events, key=lambda e: datetime.strptime(e.date, '%Y/%m/%d'))
 
         longest = ('', 0)
